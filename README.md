@@ -7,7 +7,7 @@ Watch Sam live in a 3D apartment, read his inner monologue, and inspect the spik
 1. Open the GitHub Pages URL shown in the successful **Build and deploy** workflow.
 2. In Safari, tap **Share**, then **Add to Home Screen**. Turn on **Open as Web App** and tap **Add**.
 3. On **World**, try **Move water** while Sam is walking toward it. **Journal** shows what Sam remembered and how the search turned out. **Brain** lets you rotate the atlas, choose a region, and inspect any neuron by ID.
-4. **Settings** has JSON save export and import. The site autosaves on the current device and pauses when hidden. Once the site has finished precaching, it can reopen offline.
+4. **Settings** has JSON save export and import. The site autosaves on the current device and pauses when hidden. Once the site has finished precaching, it can reopen offline. Browsers without WebGL use the Canvas apartment and atlas.
 
 ## Run it locally
 

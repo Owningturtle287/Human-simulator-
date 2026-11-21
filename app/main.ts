@@ -36,8 +36,8 @@ let paused = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 let speed = 1;
 let initialized = false;
 let worker: Worker | undefined;
-let world: WorldView | undefined;
-let brain: BrainView | undefined;
+let world: Pick<WorldView, 'draw' | 'changeCamera'> | undefined;
+let brain: Pick<BrainView, 'draw' | 'focus' | 'setRegions' | 'update'> | undefined;
 let scope: NeuronScope | undefined;
 let toastTimeout = 0;
 let thoughtVersion = -1;
@@ -309,8 +309,15 @@ async function loadView(tab: Tab) {
       const { WorldView } = await import('./world-view.ts');
       world = new WorldView(get('world-viewport'), message => text('world-asset', message));
     } catch {
-      unavailable('world-viewport', '3D rendering is unavailable on this browser.');
-      get<HTMLButtonElement>('camera').disabled = true;
+      try {
+        const { CanvasWorldView } = await import('./canvas-views.ts');
+        world = new CanvasWorldView(get('world-viewport'));
+        text('world-asset', 'Canvas view');
+        text('scene-hint', '');
+      } catch {
+        unavailable('world-viewport', 'The apartment viewer is unavailable on this browser.');
+        get<HTMLButtonElement>('camera').disabled = true;
+      }
     }
   }
   if (tab === 'brain') {
@@ -324,8 +331,12 @@ async function loadView(tab: Tab) {
         brain.focus(region);
         if (frame) brain.update(frame);
       } catch {
-        text('atlas-status', 'Atlas unavailable');
-        unavailable('brain-viewport', 'The individual neuron grid is available below.');
+        const { CanvasBrainView } = await import('./canvas-views.ts');
+        brain = new CanvasBrainView(get('brain-viewport'), source => text('atlas-status', source));
+        text('brain-hint', '');
+        brain.setRegions(regions);
+        brain.focus(region);
+        if (frame) brain.update(frame);
       }
       updateBrain();
     } catch {
