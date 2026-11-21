@@ -43,6 +43,17 @@ let toastTimeout = 0;
 let thoughtVersion = -1;
 let lastSave = 0;
 let workerStepMs = 0;
+const visibleGraphics = { 'world-viewport': true, 'brain-viewport': true, scope: true };
+const observers = new IntersectionObserver(entries => {
+  for (const entry of entries) {
+    const id = entry.target.id as keyof typeof visibleGraphics;
+    visibleGraphics[id] = entry.isIntersecting;
+    if (!entry.isIntersecting) continue;
+    if (id === 'brain-viewport' && frame) brain?.update(frame);
+    if (id === 'scope') scope?.draw(frame);
+  }
+}, { rootMargin: '24px' });
+for (const id of Object.keys(visibleGraphics)) observers.observe(get(id));
 
 try {
   const saved = localStorage.getItem(SAVE_KEY);
@@ -275,7 +286,7 @@ function updateBrain() {
       row.classList.toggle('recent-target', Boolean(frame?.spikes[inspecting!.connections[index].target]));
     });
   }
-  scope?.draw(frame);
+  if (visibleGraphics.scope) scope?.draw(frame);
 }
 
 regionInput.addEventListener('change', () => changeRegion(Number(regionInput.value)));
@@ -368,8 +379,8 @@ function animate(now: number) {
   if (document.hidden || now - lastDraw < (1000 / 32)) return;
   const dt = Math.max(0, Math.min((now - lastDraw) / 1000, .065));
   lastDraw = now;
-  if (view === 'world') world?.draw(state, dt, paused ? 0 : speed);
-  if (view === 'brain') brain?.draw(dt, paused);
+  if (view === 'world' && visibleGraphics['world-viewport']) world?.draw(state, dt, paused ? 0 : speed);
+  if (view === 'brain' && visibleGraphics['brain-viewport']) brain?.draw(dt, paused);
 }
 
 async function start() {
@@ -388,7 +399,7 @@ async function start() {
         if (view === 'world') updateWorld();
         if (view === 'journal') updateJournal();
         if (view === 'brain') {
-          brain?.update(frame);
+          if (visibleGraphics['brain-viewport']) brain?.update(frame);
           updateBrain();
         }
         if (performance.now() - lastSave > 1800) {

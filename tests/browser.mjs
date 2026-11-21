@@ -58,9 +58,13 @@ try {
 
   await page.locator('[data-view=brain]').click();
   await page.getByText('FreeSurfer anatomical atlas', { exact: true }).waitFor();
+  await page.waitForFunction(() => Number(document.getElementById('total-spikes').textContent.replaceAll(',', '')) > 0);
+  await page.locator('#brain-pause').click();
   await page.locator('#scale').selectOption('maximum');
   await page.getByText('3,145,728', { exact: true }).waitFor();
-  await page.locator('#neuron-input').fill('131071');
+  const neuron = page.locator('#neuron-input');
+  await neuron.scrollIntoViewIfNeeded();
+  await neuron.fill('131071');
   await page.getByRole('button', { name: 'Inspect', exact: true }).click();
   await page.getByRole('heading', { name: 'Neuron #131,071' }).waitFor();
   assert.equal(await page.locator('.connection').count(), 24);

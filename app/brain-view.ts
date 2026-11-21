@@ -58,7 +58,7 @@ export class BrainView {
   constructor(viewport: HTMLElement, status: (source: string) => void) {
     this.viewport = viewport;
     this.renderer = new T.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.8));
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     this.renderer.outputColorSpace = T.SRGBColorSpace;
     this.scene.background = BASE;
     this.scene.add(new T.HemisphereLight(0xe8cabc, 0x55516e, 2.02));
