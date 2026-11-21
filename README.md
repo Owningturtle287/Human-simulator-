@@ -24,8 +24,11 @@ npm test
 npm run train
 npm run benchmark
 npm run build
+npm run test:browser
 npm run preview
 ```
+
+The browser smoke test uses Chrome. Set `CHROME_PATH` if it is installed outside the usual paths.
 
 The source avatars and anatomical meshes are fetched at build time. The published app serves its files locally from the same site. See [asset credits and terms](docs/assets.md).
 

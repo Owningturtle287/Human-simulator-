@@ -15,6 +15,13 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const { request } = event;
   if (request.method !== 'GET' || !request.url.startsWith(self.registration.scope)) return;
-  const key = request.mode === 'navigate' ? new URL('index.html', self.registration.scope).href : request;
-  event.respondWith(caches.open(name).then(async cache => (await cache.match(key)) ?? fetch(request)));
+  if (request.mode === 'navigate') {
+    const shell = new URL('index.html', self.registration.scope).href;
+    event.respondWith(fetch(request).catch(async () => {
+      const cached = await caches.open(name).then(cache => cache.match(shell));
+      return cached ?? Response.error();
+    }));
+  } else {
+    event.respondWith(caches.open(name).then(async cache => (await cache.match(request)) ?? fetch(request)));
+  }
 });

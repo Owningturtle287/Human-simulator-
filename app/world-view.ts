@@ -163,6 +163,7 @@ export class WorldView {
     this.controls.update();
     this.renderer.domElement.setAttribute('aria-label', 'Interactive 3D apartment with a walking human');
     viewport.prepend(this.renderer.domElement);
+    viewport.dataset.avatar = 'loading';
     void this.loadPerson();
   }
 
@@ -193,8 +194,10 @@ export class WorldView {
       const hand = person.scene.getObjectByName('hand_r');
       if (upper && forearm && hand) this.rightArm = { upper, forearm, hand };
       this.head = person.scene.getObjectByName('head');
+      this.viewport.dataset.avatar = 'rigged';
       this.assetStatus('');
     } catch {
+      this.viewport.dataset.avatar = 'simplified';
       this.assetStatus('Simplified avatar');
     }
   }
