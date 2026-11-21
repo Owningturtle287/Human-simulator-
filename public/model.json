@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "probabilities": {
+    "desk:remembered": 0.84444,
+    "desk:seen": 0.96,
+    "desk:unknown": 0.58696,
+    "kitchen:remembered": 0.825,
+    "kitchen:seen": 0.98305,
+    "kitchen:unknown": 0.40741,
+    "shelf:remembered": 0.67677,
+    "shelf:seen": 0.92308,
+    "shelf:unknown": 0.63636
+  },
+  "examples": 465
+}

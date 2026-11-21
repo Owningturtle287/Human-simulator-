@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.asset-cache/
+public/assets/*.glb
+*-source.glb
+.training/
+public/icon-*.png

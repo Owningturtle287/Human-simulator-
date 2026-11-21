@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#f5f1eb">
+    <meta name="description" content="Watch a simulated person sense, remember, and act in a 3D apartment.">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="icon" href="./icon-192.png">
+    <link rel="apple-touch-icon" href="./icon-192.png">
+    <link rel="manifest" href="./manifest.webmanifest">
+    <title>Human Simulator</title>
+  </head>
+  <body>
+    <header class="masthead">
+      <div class="mast-inner">
+        <a href="#world" class="brand" aria-label="Human Simulator, world">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span>Human Simulator</span>
+        </a>
+        <nav class="tabs" aria-label="Simulator">
+          <a href="#world" aria-current="page" data-view="world">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m3 10 9-7 9 7v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM9 21v-7h6v7"/></svg>World
+          </a>
+          <a href="#brain" data-view="brain">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 6a3 3 0 0 0-5.7-1.3A3.5 3.5 0 0 0 4 10.5a3.7 3.7 0 0 0 1.8 6.6A3.1 3.1 0 0 0 12 18m0-12a3 3 0 0 1 5.7-1.3 3.5 3.5 0 0 1 2.3 5.8 3.7 3.7 0 0 1-1.8 6.6A3.1 3.1 0 0 1 12 18m0-12v12m-6-7c1.7-.5 3.1.2 3.3 1.8m8.7-1.8c-1.7-.5-3.1.2-3.3 1.8"/></svg>Brain
+          </a>
+          <a href="#journal" data-view="journal">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="3" width="15" height="18" rx="2"/><path d="M8 3v18m3-13h5m-5 4h5m-5 4h3"/></svg>Journal
+          </a>
+        </nav>
+        <button id="settings-open" class="icon-button settings-button" type="button" aria-label="Open settings">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M21 12a9 9 0 0 0-.14-1.55l-2.1-.52a7 7 0 0 0-.58-1.39l1.11-1.85a9 9 0 0 0-2.2-2.2l-1.85 1.11a7 7 0 0 0-1.38-.58l-.51-2.1a9 9 0 0 0-3.1 0l-.52 2.1a7 7 0 0 0-1.39.58L6.5 4.49a9 9 0 0 0-2.2 2.2l1.11 1.85a7 7 0 0 0-.57 1.39l-2.11.52a9 9 0 0 0 0 3.1l2.11.52c.15.48.34.94.57 1.39L4.3 17.3a9 9 0 0 0 2.2 2.2l1.84-1.1c.45.23.91.42 1.4.57l.51 2.1a9 9 0 0 0 3.1 0l.51-2.1c.48-.15.94-.34 1.38-.57l1.85 1.1a9 9 0 0 0 2.2-2.2l-1.11-1.84c.23-.45.43-.91.58-1.39l2.1-.52c.09-.51.14-1.03.14-1.55Z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="container">
+      <section id="world" class="view" aria-labelledby="world-title">
+        <div class="page-heading">
+          <div>
+            <p class="kicker">Sam’s world</p>
+            <h1 id="world-title">The apartment</h1>
+          </div>
+          <div class="clock"><span class="clock-face" aria-hidden="true"></span><time id="world-time">08:10</time></div>
+        </div>
+
+        <div class="world-grid">
+          <div class="world-card">
+            <div id="world-viewport" class="world-viewport">
+              <div class="scene-top">
+                <span class="status-chip"><span id="world-light" class="signal"></span><span id="world-status">Starting</span></span>
+                <button id="camera" type="button" class="scene-button" aria-label="Switch to close view" aria-pressed="false">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4"/><circle cx="12" cy="12" r="3"/></svg>
+                  <span>Follow</span>
+                </button>
+              </div>
+              <div class="scene-bottom">
+                <span id="world-asset" class="asset-note"></span>
+                <span class="scene-hint">Drag to rotate · Pinch to zoom</span>
+              </div>
+              <noscript>Enable JavaScript to run the apartment simulation.</noscript>
+            </div>
+            <div class="scene-controls">
+              <button id="pause" type="button" class="primary-button play-button"><span class="pause-icon" aria-hidden="true"></span><span>Pause</span></button>
+              <button id="speed" type="button" class="control-button speed-button" aria-label="Simulation speed, 1 times">1×</button>
+              <button id="water" type="button" class="control-button water-button">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3c1.5 3.6 5.4 6.9 5.4 10.7a5.4 5.4 0 0 1-10.8 0C6.6 10 10.5 6.6 12 3Z"/><path d="M10 15.4c.4.9 1 1.4 1.9 1.5"/></svg>
+                Move water
+              </button>
+            </div>
+          </div>
+
+          <aside class="world-aside" aria-label="Sam’s current state">
+            <section class="card thought-card" aria-labelledby="thought-title">
+              <div class="card-top"><h2 id="thought-title">Inner monologue</h2><span class="thought-dot" aria-hidden="true">“</span></div>
+              <p class="latest-thought" id="thought">Sam is waking up.</p>
+              <a href="#journal" class="quiet-link">Open journal <span aria-hidden="true">↗</span></a>
+            </section>
+            <section class="card needs-card" aria-labelledby="needs-title">
+              <h2 id="needs-title">Body</h2>
+              <div class="needs" id="needs">
+                <div><label for="hydration">Hydration</label><progress id="hydration" max="100" value="37"></progress><span id="hydration-value">37%</span></div>
+                <div><label for="nutrition">Nutrition</label><progress id="nutrition" max="100" value="74"></progress><span id="nutrition-value">74%</span></div>
+                <div><label for="energy">Energy</label><progress id="energy" max="100" value="80"></progress><span id="energy-value">80%</span></div>
+              </div>
+            </section>
+            <section class="card goal-card" aria-label="Current goal">
+              <span class="goal-symbol" aria-hidden="true">◎</span>
+              <div><h2>Current goal</h2><p id="goal">Getting oriented</p></div>
+            </section>
+          </aside>
+        </div>
+      </section>
+
+      <section id="brain" class="view" aria-labelledby="brain-title" hidden>
+        <div class="page-heading">
+          <div><p class="kicker">Sam’s nervous system</p><h1 id="brain-title">The brain</h1></div>
+          <button id="brain-pause" class="control-button brain-pause" type="button">Pause</button>
+        </div>
+        <div class="brain-grid">
+          <div class="brain-main">
+            <div class="brain-card">
+              <div id="brain-viewport" class="brain-viewport">
+                <div class="brain-overlay">
+                  <span><span class="signal" id="brain-light"></span><span id="brain-status">Live activity</span></span>
+                  <span id="atlas-status">Loading atlas</span>
+                </div>
+                <span class="brain-hint">Drag to rotate · Pinch to zoom</span>
+              </div>
+              <dl class="brain-metrics">
+                <div><dt>Neurons</dt><dd id="total-neurons">24,576</dd></div>
+                <div><dt>Synapses</dt><dd id="total-connections">294,912</dd></div>
+                <div><dt>Spikes / update</dt><dd id="total-spikes">0</dd></div>
+              </dl>
+            </div>
+            <section class="card region-card">
+              <div class="field"><label for="region">Brain region</label><select id="region"><option value="-1">Whole brain</option></select></div>
+              <p id="region-note">Choose a region to see its neurons. The 3D map samples live activity at approximate locations within the atlas.</p>
+              <div class="scale-row">
+                <div class="field"><label for="scale">Network size</label><select id="scale"><option value="standard">Standard</option><option value="high">High</option><option value="maximum">Maximum</option></select></div>
+                <span id="performance" class="performance"></span>
+              </div>
+            </section>
+          </div>
+          <div class="brain-inspect">
+            <section class="card scope-card">
+              <div class="card-top"><h2>Neuron activity</h2><span class="legend"><i></i> Recent spike</span></div>
+              <canvas id="scope" aria-label="Neuron activity grid. Choose a dot or enter a neuron number."></canvas>
+              <div class="scope-controls">
+                <button id="scope-prev" class="icon-button" type="button" aria-label="Previous neurons">‹</button>
+                <span id="scope-range">Choose a region to inspect</span>
+                <button id="scope-next" class="icon-button" type="button" aria-label="Next neurons">›</button>
+              </div>
+              <form id="neuron-form" class="neuron-form">
+                <label for="neuron-input">Find neuron by ID</label>
+                <div><input id="neuron-input" type="number" inputmode="numeric" min="0" max="24575" placeholder="e.g. 100" required><button class="control-button" type="submit">Inspect</button></div>
+              </form>
+            </section>
+            <section class="card inspector-card">
+              <div class="card-top"><h2 id="neuron-title">Connections</h2><span id="neuron-fired" class="firing-tag" hidden>Spiking</span></div>
+              <p id="neuron-description">Select a neuron to follow its outgoing signals and inspect its targets, weights, and delays.</p>
+              <div id="connections" class="connections"></div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <section id="journal" class="view" aria-labelledby="journal-title" hidden>
+        <div class="page-heading"><div><p class="kicker">Sam’s experience</p><h1 id="journal-title">The journal</h1></div></div>
+        <div class="journal-grid">
+          <section class="card journal-card"><h2>Inner monologue</h2><ol id="journal-list" class="journal-list"></ol></section>
+          <section class="card memory-card">
+            <h2>Current memory</h2><p id="memory">Sam is getting oriented.</p>
+            <p id="memory-time" class="muted"></p>
+            <hr>
+            <h2>Last outcome</h2><p id="outcome">No completed actions yet.</p>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <dialog id="settings" aria-labelledby="settings-title">
+      <div class="settings-content">
+        <div class="card-top"><h2 id="settings-title">Settings</h2><button id="settings-close" class="icon-button close-button" type="button" aria-label="Close settings">×</button></div>
+        <h3>Save your simulation</h3>
+        <p>Sam’s progress saves on this device. Export a copy to keep in Files or to resume on another device.</p>
+        <div class="save-actions"><button id="export" type="button" class="primary-button">Export save</button><button id="import" type="button" class="control-button">Import save</button></div>
+        <input id="save-file" type="file" accept=".json,application/json" hidden>
+        <h3>Open from your Home Screen</h3>
+        <p>In Safari, tap Share, then Add to Home Screen. Turn on Open as Web App and tap Add.</p>
+        <a href="https://github.com/Owningturtle287/Human-simulator-/blob/main/docs/brain-and-training.md" target="_blank" rel="noopener" class="quiet-link">Brain and training notes ↗</a>
+      </div>
+    </dialog>
+    <output id="toast" class="toast" role="status" hidden></output>
+    <script type="module" src="/app/main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,64 @@
+name: Build and deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm run assets
+      - run: npm test
+      - run: npm run build
+      - uses: actions/upload-pages-artifact@v4
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        with:
+          path: dist
+
+  deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Check Pages publishing source
+        id: source
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          if source=$(gh api "repos/$GH_REPO/pages" --jq '.build_type'); then
+            if [[ "$source" == "workflow" ]]; then
+              echo "enabled=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "::notice::Choose GitHub Actions in Settings > Pages, then run this workflow again."
+            fi
+          else
+            echo "::notice::Enable GitHub Actions in Settings > Pages, then run this workflow again."
+          fi
+      - name: Deploy to GitHub Pages
+        if: steps.source.outputs.enabled == 'true'
+        id: deployment
+        uses: actions/deploy-pages@v4
